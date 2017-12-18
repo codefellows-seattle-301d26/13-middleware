@@ -25,9 +25,10 @@ Complete [today's Kata](https://www.codewars.com/kata/mutate-my-strings) and fol
 
 ```
 export PORT=3000
-export CLIENT_URL='http://localhost:8080'
-export DATABASE_URL='postgres://localhost:5432/books_app'
+export CLIENT_URL=http://localhost:8080
 export TOKEN=1234 # Please make your own PIN
+Mac:     export DATABASE_URL=postgres://localhost:5432/books_app
+Windows: export DATABASE_URL=postgres://USER:PASSWORD@localhost:5432/books_app
 ```
 
 ```sh
@@ -80,7 +81,13 @@ book_app_week_3/
 
 Today will add the functionality of removing and updating records from your database through the use of middleware. It will also include the additional feature of an administrator interface, which will only allow modifications to the database when the user is 'authenticated'.
 
-*1. As a user, I want to be able to delete a single book so that my list is always current.*
+*1. As a user, I want to have buttons in my detail view so that I can easily update or delete a single book with the click of a button.*
+
+- Add two new buttons to appear alongside any book rendered in the detail view: a button for Updating and a button for Deleting.
+  - Provide each with a `data-id` attribute that sets the ID of the book as the value, as well as a unique `id` attribute that will identify each button for use in your JS.
+- Add a new form View for updating an existing record in the database. This should look identical to your Create form, with the exception of any ID and class attributes that identify this form as an update view (as opposed to a create view).
+
+*2. As a user, I want to be able to delete a single book so that my list is always current.*
 
 - Add an endpoint for a `DELETE` request to `/api/v1/books/:id`.
   - This should use the provided ID in the URL to delete the given record from the database.
@@ -88,7 +95,7 @@ Today will add the functionality of removing and updating records from your data
   - After a successful update, a response should be sent back to the user in the form of a 204 status code.
 - Add a new method called `Book.destroy` to your `Book` model for deletion. This method will interact with your API through the use of AJAX requests.
 
-*2. As a user, I want to be able to update a single book so that my list is accurate and can be modified as needed.*
+*3. As a user, I want to be able to update a single book so that my list is accurate and can be modified as needed.*
 
 - Add an endpoint for a `PUT` request to `/api/v1/books/:id`.
   - This should use the provided ID in the URL to update the given record in the database.
@@ -103,17 +110,12 @@ Today will add the functionality of removing and updating records from your data
   - Create a new route in your PageJS route definitions, which will handle two callbacks at the `/books/:book_id/update` route.
   - The first callback should take `ctx` and `next` as arguments when invoked (passed by PageJS), and will in turn invoke the `Book.fetchOne` method and pass both previous arguments through the invocation.
   - The second callback should take `ctx` as an argument when invoked (passed by PageJS), and will in turn invoke the `bookView.initUpdateFormPage` method and pass the `ctx` argument through the invocation.
-
-*3. As a user, I want to have buttons in my detail view so that I can easily update or delete a single book with the click of a button.*
-
-- Add two new buttons to appear alongside any book rendered in the detail view: a button for Updating and a button for Deleting.
-  - Provide each with a `data-id` attribute that sets the ID of the book as the value, as well as a unique `id` attribute that will identify each button for use in your JS.
-- Add a new form View for updating an existing record in the database. This should look identical to your Create form, with the exception of any ID and class attributes that identify this form as an update view (as opposed to a create view).
 - Redeploy your application.
 
 *4. As a user, I want to have admin-only routes so that I can control access to updating and deleting books from my app.*
 
 - Create a new file named `adminView.js` which includes the following:
+  - Enclose your code in an IFFE.
   - Define a global variable called `adminView` and assign an empty object literal as its value.
   - Define a method on `adminView` called `initAdminPage` which shows the admin view and has a form field for entering the passphrase.
   - Define a method on `adminView` called `verify` which will validate the passphrase and, if it is valid, show the admin-only portion of your app
